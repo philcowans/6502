@@ -100,6 +100,10 @@ int dereference_argument(const char *memory, const int PC, const int addressing_
   return 0;
 }
 
+void increment_pc(struct processor_state *state) {
+  
+}
+
 int main(int argc, char **argv) {
   const int MEMORY_SIZE = 64 * 1024;
   char *memory = malloc(MEMORY_SIZE);
@@ -117,12 +121,22 @@ int main(int argc, char **argv) {
     case ADC: // add with carry
     case AND: // and (with accumulator)
       state.A &= argument_value;
+      increment_pc(&state);
       break;
     case ASL: // arithmetic shift left
       // TODO: Need to support in place operations
     case BCC: // branch on carry clear
-      
+      if(!(state.SR & SR_C)) 
+	state.PC = argument_value;
+      else 
+	increment_pc(&state);
+      break;
     case BCS: // branch on carry set
+      if(state.SR & SR_C) 
+	state.PC = argument_value;
+      else 
+	increment_pc(&state);
+      break;
     case BEQ: // branch on equal (zero set)
     case BIT: // bit test
     case BMI: // branch on minus (negative set)
