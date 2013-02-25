@@ -1,15 +1,15 @@
 #include <stdlib.h>
 enum addressing_modes {
-  A, ABS, ABS_X, ABS_Y, I, IMPL, IND, X_IND, IND_Y, REL, ZPG, ZPG_X, ZPG_Y, XXX
+  A, ABS, ABS_X, ABS_Y, I, IMPL, IND, X_IND, IND_Y, REL, ZPG, ZPG_X, ZPG_Y, AM_INVALID
 };
 
 enum instructions {
-  ADC, // Add with carry
-  AND, // And (with accumulator)
-  ASL, // Arithmetic shift left
-  BCC, // Branch on carry clear
-  BCS, // Branch on carry set
-  BEQ, // Branch on equal (zero set)
+  ADC, // add with carry
+  AND, // and (with accumulator)
+  ASL, // arithmetic shift left
+  BCC, // branch on carry clear
+  BCS, // branch on carry set
+  BEQ, // branch on equal (zero set)
   BIT, // bit test
   BMI, // branch on minus (negative set)
   BNE, // branch on not equal (zero clear)
@@ -34,7 +34,7 @@ enum instructions {
   JMP, // jump
   JSR, // jump subroutine
   LDA, // load accumulator
-  LDY, // load X
+  LDX, // load X
   LDY, // load Y
   LSR, // logical shift right
   NOP, // no operation
@@ -60,267 +60,14 @@ enum instructions {
   TXA, // transfer X to accumulator
   TXS, // transfer X to stack pointer
   TYA, // transfer Y to accumulator
-  XXX  // undefined
+  I_INVALID // undefined
 };
 
 
-{BRK, IMPL},
-{ORA, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{ORA zpg
-ASL zpg
-XXX, XXX},
-{PHP, IMPL},
-{ORA #
-ASL A
-XXX, XXX},
-{XXX, XXX},
-{ORA abs
-ASL abs
-XXX, XXX},
-{BPL rel
-ORA ind,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{ORA zpg,X
-ASL zpg,X
-XXX, XXX},
-{CLC, IMPL},
-{ORA abs,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{ORA abs,X
-ASL abs,X
-XXX, XXX},
-{JSR abs
-AND, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{BIT zpg
-AND zpg
-ROL zpg
-XXX, XXX},
-{PLP, IMPL},
-{AND #
-ROL A
-XXX, XXX},
-{BIT abs
-AND abs
-ROL abs
-XXX, XXX},
-{BMI rel
-AND ind,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{AND zpg,X
-ROL zpg,X
-XXX, XXX},
-{SEC, IMPL},
-{AND abs,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{AND abs,X
-ROL abs,X
-XXX, XXX},
-{RTI, IMPL},
-{EOR, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{EOR zpg
-LSR zpg
-XXX, XXX},
-{PHA, IMPL},
-{EOR #
-LSR A
-XXX, XXX},
-{JMP abs
-EOR abs
-LSR abs
-XXX, XXX},
-{BVC rel
-EOR ind,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{EOR zpg,X
-LSR zpg,X
-XXX, XXX},
-{CLI, IMPL},
-{EOR abs,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{EOR abs,X
-LSR abs,X
-XXX, XXX},
-{RTS, IMPL},
-{ADC, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{ADC zpg
-ROR zpg
-XXX, XXX},
-{PLA, IMPL},
-{ADC #
-ROR A
-XXX, XXX},
-{JMP ind
-ADC abs
-ROR abs
-XXX, XXX},
-{BVS rel
-ADC ind,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{ADC zpg,X
-ROR zpg,X
-XXX, XXX},
-{SEI, IMPL},
-{ADC abs,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{ADC abs,X
-ROR abs,X
-XXX, XXX},
-{XXX, XXX},
-{STA, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{STY zpg
-STA zpg
-STX zpg
-XXX, XXX},
-{DEY, IMPL},
-{XXX, XXX},
-{TXA, IMPL},
-{XXX, XXX},
-{STY abs
-STA abs
-STX abs
-XXX, XXX},
-{BCC rel
-STA ind,Y
-XXX, XXX},
-{XXX, XXX},
-{STY zpg,X
-STA zpg,X
-STX zpg,Y
-XXX, XXX},
-{TYA, IMPL},
-{STA abs,Y
-TXS, IMPL},
-{XXX, XXX},
-{XXX, XXX},
-{STA abs,X
-XXX, XXX},
-{XXX, XXX},
-{LDY #
-LDA, X_IND},
-{LDX #
-XXX, XXX},
-{LDY zpg
-LDA zpg
-LDX zpg
-XXX, XXX},
-{TAY, IMPL},
-{LDA #
-TAX, IMPL},
-{XXX, XXX},
-{LDY abs
-LDA abs
-LDX abs
-XXX, XXX},
-{BCS rel
-LDA ind,Y
-XXX, XXX},
-{XXX, XXX},
-{LDY zpg,X
-LDA zpg,X
-LDX zpg,Y
-XXX, XXX},
-{CLV, IMPL},
-{LDA abs,Y
-TSX, IMPL},
-{XXX, XXX},
-{LDY abs,X
-LDA abs,X
-LDX abs,Y
-XXX, XXX},
-{CPY #
-CMP, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{CPY zpg
-CMP zpg
-DEC zpg
-XXX, XXX},
-{INY, IMPL},
-{CMP #
-DEX, IMPL},
-{XXX, XXX},
-{CPY abs
-CMP abs
-DEC abs
-XXX, XXX},
-{BNE rel
-CMP ind,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{CMP zpg,X
-DEC zpg,X
-XXX, XXX},
-{CLD, IMPL},
-{CMP abs,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{CMP abs,X
-DEC abs,X
-XXX, XXX},
-{CPX #
-SBC, X_IND},
-{XXX, XXX},
-{XXX, XXX},
-{CPX zpg
-SBC zpg
-INC zpg
-XXX, XXX},
-{INX, IMPL},
-{SBC #
-NOP, IMPL},
-{XXX, XXX},
-{CPX abs
-SBC abs
-INC abs
-XXX, XXX},
-{BEQ rel
-SBC ind,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{SBC zpg,X
-INC zpg,X
-XXX, XXX},
-{SED, IMPL},
-{SBC abs,Y
-XXX, XXX},
-{XXX, XXX},
-{XXX, XXX},
-{SBC abs,X
-INC abs,X
-XXX, XXX},
-{
+enum instructions instruction_table[] = {BRK, ORA, I_INVALID, I_INVALID, I_INVALID, ORA, ASL, I_INVALID, PHP, ORA, ASL, I_INVALID, I_INVALID, ORA, ASL, I_INVALID, BPL, ORA, I_INVALID, I_INVALID, I_INVALID, ORA, ASL, I_INVALID, CLC, ORA, I_INVALID, I_INVALID, I_INVALID, ORA, ASL, I_INVALID, JSR, AND, I_INVALID, I_INVALID, BIT, AND, ROL, I_INVALID, PLP, AND, ROL, I_INVALID, BIT, AND, ROL, I_INVALID, BMI, AND, I_INVALID, I_INVALID, I_INVALID, AND, ROL, I_INVALID, SEC, AND, I_INVALID, I_INVALID, I_INVALID, AND, ROL, I_INVALID, RTI, EOR, I_INVALID, I_INVALID, I_INVALID, EOR, LSR, I_INVALID, PHA, EOR, LSR, I_INVALID, JMP, EOR, LSR, I_INVALID, BVC, EOR, I_INVALID, I_INVALID, I_INVALID, EOR, LSR, I_INVALID, CLI, EOR, I_INVALID, I_INVALID, I_INVALID, EOR, LSR, I_INVALID, RTS, ADC, I_INVALID, I_INVALID, I_INVALID, ADC, ROR, I_INVALID, PLA, ADC, ROR, I_INVALID, JMP, ADC, ROR, I_INVALID, BVS, ADC, I_INVALID, I_INVALID, I_INVALID, ADC, ROR, I_INVALID, SEI, ADC, I_INVALID, I_INVALID, I_INVALID, ADC, ROR, I_INVALID, I_INVALID, STA, I_INVALID, I_INVALID, STY, STA, STX, I_INVALID, DEY, I_INVALID, TXA, I_INVALID, STY, STA, STX, I_INVALID, BCC, STA, I_INVALID, I_INVALID, STY, STA, STX, I_INVALID, TYA, STA, TXS, I_INVALID, I_INVALID, STA, I_INVALID, I_INVALID, LDY, LDA, LDX, I_INVALID, LDY, LDA, LDX, I_INVALID, TAY, LDA, TAX, I_INVALID, LDY, LDA, LDX, I_INVALID, BCS, LDA, I_INVALID, I_INVALID, LDY, LDA, LDX, I_INVALID, CLV, LDA, TSX, I_INVALID, LDY, LDA, LDX, I_INVALID, CPY, CMP, I_INVALID, I_INVALID, CPY, CMP, DEC, I_INVALID, INY, CMP, DEX, I_INVALID, CPY, CMP, DEC, I_INVALID, BNE, CMP, I_INVALID, I_INVALID, I_INVALID, CMP, DEC, I_INVALID, CLD, CMP, I_INVALID, I_INVALID, I_INVALID, CMP, DEC, I_INVALID, CPX, SBC, I_INVALID, I_INVALID, CPX, SBC, INC, I_INVALID, INX, SBC, NOP, I_INVALID, CPX, SBC, INC, I_INVALID, BEQ, SBC, I_INVALID, I_INVALID, I_INVALID, SBC, INC, I_INVALID, SED, SBC, I_INVALID, I_INVALID, I_INVALID, SBC, INC, I_INVALID};
+
+enum addressing_modes addressing_modes_table[] = {IMPL, X_IND, AM_INVALID, AM_INVALID, AM_INVALID, ZPG, ZPG, AM_INVALID, IMPL, I, A, AM_INVALID, AM_INVALID, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, AM_INVALID, IMPL, ABS_Y, AM_INVALID, AM_INVALID, AM_INVALID, ABS_X, ABS_X, AM_INVALID, ABS, X_IND, AM_INVALID, AM_INVALID, ZPG, ZPG, ZPG, AM_INVALID, IMPL, I, A, AM_INVALID, ABS, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, AM_INVALID, IMPL, ABS_Y, AM_INVALID, AM_INVALID, AM_INVALID, ABS_X, ABS_X, AM_INVALID, IMPL, X_IND, AM_INVALID, AM_INVALID, AM_INVALID, ZPG, ZPG, AM_INVALID, IMPL, I, A, AM_INVALID, ABS, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, AM_INVALID, IMPL, ABS_Y, AM_INVALID, AM_INVALID, AM_INVALID, ABS_X, ABS_X, AM_INVALID, IMPL, X_IND, AM_INVALID, AM_INVALID, AM_INVALID, ZPG, ZPG, AM_INVALID, IMPL, I, A, AM_INVALID, IND, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, AM_INVALID, IMPL, ABS_Y, AM_INVALID, AM_INVALID, AM_INVALID, ABS_X, ABS_X, AM_INVALID, AM_INVALID, X_IND, AM_INVALID, AM_INVALID, ZPG, ZPG, ZPG, AM_INVALID, IMPL, AM_INVALID, IMPL, AM_INVALID, ABS, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, ZPG_Y, AM_INVALID, IMPL, ABS_Y, IMPL, AM_INVALID, AM_INVALID, ABS_X, AM_INVALID, AM_INVALID, I, X_IND, I, AM_INVALID, ZPG, ZPG, ZPG, AM_INVALID, IMPL, I, IMPL, AM_INVALID, ABS, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, ZPG_Y, AM_INVALID, IMPL, ABS_Y, IMPL, AM_INVALID, ABS_X, ABS_X, ABS_Y, AM_INVALID, I, X_IND, AM_INVALID, AM_INVALID, ZPG, ZPG, ZPG, AM_INVALID, IMPL, I, IMPL, AM_INVALID, ABS, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, AM_INVALID, IMPL, ABS_Y, AM_INVALID, AM_INVALID, AM_INVALID, ABS_X, ABS_X, AM_INVALID, I, X_IND, AM_INVALID, AM_INVALID, ZPG, ZPG, ZPG, AM_INVALID, IMPL, I, IMPL, AM_INVALID, ABS, ABS, ABS, AM_INVALID, REL, IND_Y, AM_INVALID, AM_INVALID, AM_INVALID, ZPG_X, ZPG_X, AM_INVALID, IMPL, ABS_Y, AM_INVALID, AM_INVALID, AM_INVALID, ABS_X, ABS_X, AM_INVALID};
+
 
 struct processor_state {
   int A;
@@ -330,6 +77,16 @@ struct processor_state {
   int SR;
   int SP;
 };
+
+// Status register bitmap
+const char SR_N = 1 << 7; // Negative
+const char SR_V = 1 << 6; // Overflow
+                          // Unused
+const char SR_B = 1 << 4; // Break
+const char SR_D = 1 << 3; // Decimal
+const char SR_I = 1 << 2; // Interrupt (IRQ disable)
+const char SR_Z = 1 << 1; // Zero
+const char SR_C = 1 << 0; // Carry
 
 int get_instruction(const char opcode) {
   return 0;
@@ -357,6 +114,63 @@ int main(int argc, char **argv) {
     // Initialize here
 
     switch(instruction) {
+    case ADC: // add with carry
+    case AND: // and (with accumulator)
+    case ASL: // arithmetic shift left
+    case BCC: // branch on carry clear
+    case BCS: // branch on carry set
+    case BEQ: // branch on equal (zero set)
+    case BIT: // bit test
+    case BMI: // branch on minus (negative set)
+    case BNE: // branch on not equal (zero clear)
+    case BPL: // branch on plus (negative clear)
+    case BRK: // interrupt
+    case BVC: // branch on overflow clear
+    case BVS: // branch on overflow set
+    case CLC: // clear carry
+    case CLD: // clear decimal
+    case CLI: // clear interrupt disable
+    case CLV: // clear overflow
+    case CMP: // compare (with accumulator)
+    case CPX: // compare with X
+    case CPY: // compare with Y
+    case DEC: // decrement
+    case DEX: // decrement X
+    case DEY: // decrement Y
+    case EOR: // exclusive or (with accumulator)
+    case INC: // increment
+    case INX: // increment X
+    case INY: // increment Y
+    case JMP: // jump
+    case JSR: // jump subroutine
+    case LDA: // load accumulator
+    case LDX: // load X
+    case LDY: // load Y
+    case LSR: // logical shift right
+    case NOP: // no operation
+    case ORA: // or with accumulator
+    case PHA: // push accumulator
+    case PHP: // push processor status (SR)
+    case PLA: // pull accumulator
+    case PLP: // pull processor status (SR)
+    case ROL: // rotate left
+    case ROR: // rotate right
+    case RTI: // return from interrupt
+    case RTS: // return from subroutine
+    case SBC: // subtract with carry
+    case SEC: // set carry
+    case SED: // set decimal
+    case SEI: // set interrupt disable
+    case STA: // store accumulator
+    case STX: // store X
+    case STY: // store Y
+    case TAX: // transfer accumulator to X
+    case TAY: // transfer accumulator to Y
+    case TSX: // transfer stack pointer to X
+    case TXA: // transfer X to accumulator
+    case TXS: // transfer X to stack pointer
+    case TYA: // transfer Y to accumulator
+
     default:
       exit(1);
     }
