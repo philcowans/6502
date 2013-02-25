@@ -116,8 +116,12 @@ int main(int argc, char **argv) {
     switch(instruction) {
     case ADC: // add with carry
     case AND: // and (with accumulator)
+      state.A &= argument_value;
+      break;
     case ASL: // arithmetic shift left
+      // TODO: Need to support in place operations
     case BCC: // branch on carry clear
+      
     case BCS: // branch on carry set
     case BEQ: // branch on equal (zero set)
     case BIT: // bit test
